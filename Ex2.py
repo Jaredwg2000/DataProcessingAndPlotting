@@ -11,6 +11,7 @@ import os
 # from mpl_toolkits import mplot3d
 
 # Take the path from input into the console
+print("Path: ")
 path = input()
 
 # Initialize vairables
