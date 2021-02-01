@@ -79,15 +79,15 @@ ytheta = []
 
 # Take the points closest to the energy minimum in each direction for use
 # in the fit
-for i in range(len(E)):
+for i, Ei in enumerate(E):
     if(r[i] == minr):
         if(abs(theta[i]-mintheta) <= pi/45):
             xtheta.append(theta[i])
-            ytheta.append(E[i])
+            ytheta.append(Ei)
     if(theta[i] == mintheta):
         if(abs(r[i]-minr) <= 3 * pow(10, -11)):
             xr.append(r[i])
-            yr.append(E[i])
+            yr.append(Ei)
 
 # Do the fits
 pr = polyfit(xr, yr, 2)
