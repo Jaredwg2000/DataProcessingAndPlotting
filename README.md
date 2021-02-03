@@ -14,5 +14,10 @@ I effectively used it like a filled in scatter plot. This is the program that ca
 Surface.py just demonstrates the manipulation required to get the data to work with a surface plot.
 
 The biggest issue with the program is that it naively takes the minimum value of r and theta in the data and uses that
-as the assumed equilibrium bond length and angle. This could be improved by finding a 2d polynomial for the data and finding
-the minimum of that. I think this makes it more complicated to find the values of k_r and k_theta though.
+as the assumed equilibrium bond length and angle.
+
+To code this, one would have to do a fit in one direction (e.g. r) then use those fits in the other direction (i.e. theta) to get a 
+new set of values with finer steps between theta values. From here, the new theta values could be used to find new r values, etc.
+
+From these new values for r and theta with corresponding E, a new minimum energy can be found and the same process can be done as
+used in Ex2.py to find a more precise geometry, and therefore more precise normal mode frequencies.
