@@ -117,7 +117,7 @@ print("From the polynomial fit, ν_θ = " + str(vtheta) + " Hz; or "
       + str(vbartheta) + " cm^-1")
 
 
-# Lebels for the graph
+# Labels for the graph
 ax.set_xlabel("r/Å")
 ax.set_ylabel("θ/degrees")
 ax.set_zlabel("E/hartree")
