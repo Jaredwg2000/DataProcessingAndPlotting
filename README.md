@@ -21,3 +21,12 @@ new set of values with finer steps between theta values. From here, the new thet
 
 From these new values for r and theta with corresponding E, a new minimum energy can be found and the same process can be done as
 used in Ex2.py to find a more precise geometry, and therefore more precise normal mode frequencies.
+
+04/2/21 - I implemented the interpolation by:
+  - Finding 5 points in each direction surrounding the minimum calculated energy
+  - Find 5 polyfits going in one axis from these points
+  - Use these polyfits to find a 41 polyfits in the orthogonal axis
+  - Find the minimum minimum energy from these polyfits and report the value of r and theta that gave that energy.
+This ended up moving the results away from the actual values, not towards, but the code is in Surface.py.
+I did not use these values to calculate new normal mode frequencies - this would require another polyfit in the
+first axis.
