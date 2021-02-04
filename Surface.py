@@ -71,26 +71,89 @@ for i in theta:
     if(i not in Theta):
         Theta.append(i)
 
+# Making the x/y inputs for plot_surface
+Rs, Thetas = meshgrid(R, Theta)
+
 Energy = ndarray((len(Theta), len(R)))
+
+tempr = 0.0
+temptheta = 0.0
+tempE = 0.0
 
 # Sort the energy values into an array to plot using plot_surface
 for i, j in enumerate(E):
     Energy[i % len(Theta), math.floor(i / len(Theta))] = j
+    if(j < tempE):
+        tempE = j
+        tempr = R[math.floor(i / len(Theta))]
+        temptheta = Theta[i % len(Theta)]
 
-# Making the x/y inputs for plot_surface
-R, Theta = meshgrid(R, Theta)
+temprIndex = R.index(tempr)
+tempthetaIndex = Theta.index(temptheta)
+
+scaledEnergy = Energy*4.356*pow(10, -18)
+R = [i * pow(10, -10) for i in R]
+Theta = [i * pi/180 for i in Theta]
+
+polyfitlistThetas = []
+
+for i in range(temprIndex - 2, temprIndex + 3):
+    fitx = []
+    fity = []
+    for j in range(tempthetaIndex - 2, tempthetaIndex + 3):
+        fitx.append(Theta[j])
+        fity.append(scaledEnergy[j, i])
+    polyfitlistThetas.append(polyfit(fitx, fity, 2))
+
+polyfitlistRs = []
+
+# ^ this works
+# v numbers are close
+
+for i in linspace(Theta[tempthetaIndex-2], Theta[tempthetaIndex+2], 41):
+    fitx = []
+    fity = []
+    for j, p in enumerate(polyfitlistThetas):
+        fitx.append(R[temprIndex - 2 + j])
+        fity.append(p[0]*i**2 + p[1]*i + p[2])
+    polyfitlistRs.append(polyfit(fitx, fity, 2))
+
+# find value of r corresponding to minimum i.e. -p[1]/2p[0]
+eqbmE = 0
+eqbmR = 0
+tempR = []
+tempE = []
+
+for i, f in enumerate(polyfitlistRs):
+    tempR.append(-f[1] / (2*f[0]))
+    tempE.append(f[0]*tempR[i]**2 + f[1]*tempR[i] + f[2])
+
+tempEIndex = tempE.index(min(tempE))
+eqbmR = tempR[tempEIndex]
+print(eqbmR)
+
+eqbmTheta = Theta[tempthetaIndex-2]
+eqbmTheta += tempEIndex*(Theta[tempthetaIndex+2] - Theta[tempthetaIndex-2])/40
+eqbmTheta *= 180/pi
+print(eqbmTheta)
 
 # Plot the data using plot_surface
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-surf = ax.plot_surface(R, Theta, Energy, cmap=cm.coolwarm,
+surf = ax.plot_surface(Rs, Thetas, Energy, cmap=cm.coolwarm,
                        linewidth=0, antialiased=False)
 ax.set_xlabel("r/Å")
 ax.set_ylabel("θ/degrees")
 ax.set_zlabel("E/hartree")
 ax.set_title("Energy surface for " + molecule)
-ax.set_xlim(r[0], r[-1])
-ax.set_ylim(theta[0], theta[-1])
+
+
+
+
+
+
+
+
 
 plt.show()
